@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amaris Beach · Menu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ECE4D1; --bg-warm:#E8DEC8; --card:#EFE8D7;
+    --ink:#5A4A39; --ink-soft:#6E5D49; --muted:#8C7B61;
+    --gold:#AC8A56; --gold-deep:#9A7842; --eyebrow:#A68C66;
+    --line:#CBBB99; --line-soft:#D9CCAD; --maxw:1180px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--ink-soft);font-family:'Lora',Georgia,serif;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+  .stroke{stroke:var(--ink);fill:none;stroke-width:1;vector-effect:non-scaling-stroke}
+
+  .lang-toggle{position:fixed;top:18px;right:18px;z-index:60;display:flex;align-items:center;
+    background:rgba(239,232,215,.82);backdrop-filter:blur(8px);border:1px solid var(--line);
+    border-radius:40px;padding:4px;box-shadow:0 6px 22px rgba(90,74,57,.10)}
+  .lang-toggle button{font-family:'Poppins',sans-serif;font-size:11px;letter-spacing:.18em;border:none;background:none;
+    color:var(--muted);padding:7px 15px;border-radius:30px;cursor:pointer;transition:color .35s ease, background .45s ease}
+  .lang-toggle button.active{background:var(--ink);color:#F2EBDA}
+  .lang-toggle button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+  .cover{position:relative;min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 90px}
+  .frame{position:absolute;inset:16px;border:1px solid var(--line);pointer-events:none}
+  .corner{position:absolute;width:120px;height:120px;opacity:0;animation:fadeIn 1.4s ease .2s forwards}
+  .corner.tl{top:8px;left:8px}
+  .corner.tr{top:8px;right:8px;transform:scaleX(-1)}
+  .cover-eyebrow{font-family:'Poppins',sans-serif;font-weight:300;font-size:12px;letter-spacing:.42em;color:var(--eyebrow);text-transform:uppercase;margin-bottom:38px;opacity:0;animation:rise 1s ease .35s forwards}
+  .wordmark{margin-bottom:8px}
+  .wordmark .amaris{font-family:'Poppins',sans-serif;font-weight:300;font-size:clamp(52px,11vw,118px);letter-spacing:.12em;color:var(--ink);line-height:1;display:flex;justify-content:center}
+  .wordmark .amaris span{opacity:0;transform:translateY(18px);animation:rise .9s cubic-bezier(.2,.7,.2,1) forwards}
+  .wordmark .beach{font-family:'Poppins',sans-serif;font-weight:300;font-size:clamp(18px,3.4vw,30px);letter-spacing:.62em;color:var(--ink);margin-top:14px;padding-left:.62em;opacity:0;animation:rise 1s ease .9s forwards}
+  .cover-divider{display:flex;align-items:center;gap:16px;margin:46px 0 24px;opacity:0;animation:fadeIn 1s ease 1.1s forwards}
+  .cover-divider .ln{width:62px;height:1px;background:var(--line)}
+  .menu-label{font-family:'Poppins',sans-serif;font-weight:300;font-size:clamp(15px,2.6vw,20px);letter-spacing:.46em;color:var(--ink);text-transform:uppercase;padding-left:.46em;opacity:0;animation:rise 1s ease 1.2s forwards}
+  .palm{margin:30px auto 0;opacity:0;animation:fadeIn 1.6s ease 1.4s forwards}
+  .palm path{stroke-dasharray:240;stroke-dashoffset:240;animation:draw 2.4s ease 1.5s forwards}
+  .cover-foot{position:absolute;bottom:54px;left:0;right:0;font-family:'Poppins',sans-serif;font-weight:300;font-size:12px;letter-spacing:.34em;color:var(--muted);text-transform:uppercase;opacity:0;animation:fadeIn 1.2s ease 1.6s forwards;padding:0 24px}
+  .waves{position:absolute;left:0;right:0;bottom:0;width:100%;height:40px;opacity:.55}
+
+  .navbar{position:sticky;top:0;z-index:50;background:rgba(236,228,209,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-soft)}
+  .navbar .inner{max-width:var(--maxw);margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding:11px 20px;scrollbar-width:none}
+  .navbar .inner::-webkit-scrollbar{display:none}
+  .navbar a{flex:0 0 auto;font-family:'Poppins',sans-serif;font-weight:400;font-size:11px;letter-spacing:.16em;text-transform:uppercase;text-decoration:none;color:var(--muted);padding:7px 14px;border-radius:30px;white-space:nowrap;transition:color .3s, background .3s}
+  .navbar a:hover{color:var(--ink)}
+  .navbar a.active{color:#F2EBDA;background:var(--gold)}
+
+  #menu{transition:opacity .28s ease, filter .28s ease}
+  #menu.swapping{opacity:0;filter:blur(3px)}
+  .section{padding:78px 0 16px}
+  .section-head{text-align:center;margin-bottom:52px}
+  .sec-eyebrow{font-family:'Poppins',sans-serif;font-weight:300;font-size:12px;letter-spacing:.4em;color:var(--eyebrow);text-transform:uppercase;display:block;margin-bottom:14px}
+  .sec-title{font-family:'Lora',serif;font-weight:500;font-size:clamp(30px,5.2vw,46px);color:var(--ink);letter-spacing:.01em}
+  .sec-orn{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:18px}
+  .sec-orn .ln{width:50px;height:1px;background:var(--line)}
+  .sec-orn svg{opacity:.85}
+
+  .groups{column-count:2;column-gap:64px}
+  @media(max-width:760px){.groups{column-count:1}}
+  .group{break-inside:avoid;margin-bottom:46px;display:inline-block;width:100%}
+  .group-head{font-family:'Poppins',sans-serif;font-weight:400;font-size:13px;letter-spacing:.26em;color:var(--gold-deep);text-transform:uppercase;display:flex;align-items:center;gap:14px;margin-bottom:22px}
+  .group-head::after{content:"";flex:1;height:1px;background:var(--line-soft)}
+
+  .item{margin-bottom:20px;opacity:0;transform:translateY(16px)}
+  .item.visible{opacity:1;transform:none;transition:opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1)}
+  .item-top{display:flex;align-items:baseline;gap:8px}
+  .item-name{font-family:'Lora',serif;font-weight:500;font-size:18px;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .leader{flex:1;border-bottom:1px dotted var(--line);transform:translateY(-4px);min-width:14px;transition:border-color .4s}
+  .item:hover .leader{border-color:var(--gold)}
+  .item-price{font-family:'Lora',serif;font-weight:500;font-size:17px;color:var(--gold);white-space:nowrap;letter-spacing:.02em}
+  .item-desc{font-family:'Lora',serif;font-style:italic;font-weight:400;font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.5;max-width:46ch}
+
+  .group.feature{column-span:all;display:block;background:var(--card);border:1px solid var(--line-soft);border-radius:18px;padding:34px 38px 14px;margin:8px 0 46px;box-shadow:0 10px 34px rgba(90,74,57,.06)}
+  .group.feature .item-desc{max-width:none}
+
+  .divider{width:100%;height:30px;margin:8px 0;opacity:.4}
+
+  footer{text-align:center;padding:70px 24px 90px;position:relative}
+  .foot-palm{opacity:.7;margin-bottom:24px}
+  .foot-line{font-family:'Lora',serif;font-style:italic;font-size:16px;color:var(--ink)}
+  .foot-meta{font-family:'Poppins',sans-serif;font-weight:300;font-size:11px;letter-spacing:.34em;color:var(--muted);text-transform:uppercase;margin-top:22px}
+
+  @keyframes rise{to{opacity:1;transform:none}}
+  @keyframes fadeIn{to{opacity:1}}
+  @keyframes draw{to{stroke-dashoffset:0}}
+
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    .item{opacity:1;transform:none}
+    .palm path{stroke-dashoffset:0}
+    .corner,.cover-eyebrow,.wordmark span,.wordmark .beach,.cover-divider,.menu-label,.palm,.cover-foot{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<div class="lang-toggle" role="group" aria-label="Language">
+  <button id="btn-en" class="active" onclick="setLang('en')">EN</button>
+  <button id="btn-tr" onclick="setLang('tr')">TR</button>
+</div>
+
+<header class="cover">
+  <div class="frame"></div>
+  <svg class="corner tl" viewBox="0 0 120 120"><g class="stroke">
+    <path d="M8 8 C 40 18, 64 40, 78 78"/><path d="M8 8 C 26 30, 36 56, 40 92"/><path d="M8 8 C 46 10, 80 22, 104 44"/>
+  </g></svg>
+  <svg class="corner tr" viewBox="0 0 120 120"><g class="stroke">
+    <path d="M8 8 C 40 18, 64 40, 78 78"/><path d="M8 8 C 26 30, 36 56, 40 92"/><path d="M8 8 C 46 10, 80 22, 104 44"/>
+  </g></svg>
+
+  <div class="cover-eyebrow" data-i="cover.region">Northern Cyprus · Karşıyaka</div>
+  <div class="wordmark">
+    <div class="amaris" aria-label="Amaris">
+      <span style="animation-delay:.45s">&#923;</span><span style="animation-delay:.52s">M</span><span style="animation-delay:.59s">A</span><span style="animation-delay:.66s">R</span><span style="animation-delay:.73s">I</span><span style="animation-delay:.80s">S</span>
+    </div>
+    <div class="beach">BEACH</div>
+  </div>
+  <div class="cover-divider"><span class="ln"></span>
+    <svg width="14" height="22" viewBox="0 0 14 22"><path class="stroke" d="M7 1 C 12 7, 12 15, 7 21 C 2 15, 2 7, 7 1Z"/></svg>
+    <span class="ln"></span></div>
+  <div class="menu-label" data-i="cover.menu">MENU</div>
+  <svg class="palm" width="120" height="70" viewBox="0 0 120 70">
+    <path class="stroke" d="M60 70 L60 30"/><path class="stroke" d="M60 30 C 40 18, 20 16, 4 22"/><path class="stroke" d="M60 30 C 80 18, 100 16, 116 22"/>
+    <path class="stroke" d="M60 30 C 46 14, 34 8, 24 4"/><path class="stroke" d="M60 30 C 74 14, 86 8, 96 4"/><path class="stroke" d="M60 30 C 58 14, 58 8, 60 2"/>
+  </svg>
+  <div class="cover-foot" data-i="cover.foot">Good morning, and welcome to the sea</div>
+  <svg class="waves" viewBox="0 0 1200 40" preserveAspectRatio="none">
+    <path class="stroke" d="M0 20 Q 60 6 120 20 T 240 20 T 360 20 T 480 20 T 600 20 T 720 20 T 840 20 T 960 20 T 1080 20 T 1200 20"/>
+    <path class="stroke" d="M0 30 Q 60 16 120 30 T 240 30 T 360 30 T 480 30 T 600 30 T 720 30 T 840 30 T 960 30 T 1080 30 T 1200 30" style="opacity:.6"/>
+  </svg>
+</header>
+
+<nav class="navbar"><div class="inner" id="nav"></div></nav>
+<main id="menu" class="wrap"></main>
+
+<footer>
+  <svg class="foot-palm" width="100" height="58" viewBox="0 0 120 70">
+    <path class="stroke" d="M60 70 L60 30"/><path class="stroke" d="M60 30 C 40 18, 20 16, 4 22"/><path class="stroke" d="M60 30 C 80 18, 100 16, 116 22"/>
+    <path class="stroke" d="M60 30 C 46 14, 34 8, 24 4"/><path class="stroke" d="M60 30 C 74 14, 86 8, 96 4"/><path class="stroke" d="M60 30 C 58 14, 58 8, 60 2"/>
+  </svg>
+  <div class="foot-line" data-i="foot.line">Amaris Beach · thank you for joining us by the sea</div>
+  <div class="foot-meta" data-i="foot.meta">Northern Cyprus · Karşıyaka</div>
+</footer>
+
+<script>
+const UI = {
+  "cover.region":{en:"Northern Cyprus · Karşıyaka", tr:"Kuzey Kıbrıs · Karşıyaka"},
+  "cover.menu":{en:"MENU", tr:"MENÜ"},
+  "cover.foot":{en:"Good morning, and welcome to the sea", tr:"Günaydın, denize hoş geldiniz"},
+  "foot.line":{en:"Amaris Beach · thank you for joining us by the sea", tr:"Amaris Beach · deniz kıyısında bize katıldığınız için teşekkürler"},
+  "foot.meta":{en:"Northern Cyprus · Karşıyaka", tr:"Kuzey Kıbrıs · Karşıyaka"},
+};
+
+const ICON = {
+  sun:'<svg width="22" height="22" viewBox="0 0 24 24"><g class="stroke"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v3M12 19.5v3M1.5 12h3M19.5 12h3M4.5 4.5l2 2M17.5 17.5l2 2M19.5 4.5l-2 2M6.5 17.5l-2 2"/></g></svg>',
+  egg:'<svg width="24" height="20" viewBox="0 0 26 22"><g class="stroke"><path d="M13 2 C 7 2, 3.5 9, 5.5 15 C 7.5 20, 18.5 20, 20.5 15 C 22.5 9, 19 2, 13 2 Z"/><circle cx="13" cy="11" r="3.8"/></g></svg>',
+  fork:'<svg width="16" height="22" viewBox="0 0 18 24"><g class="stroke"><path d="M4 1.5 v7 M2 1.5 v5 a2 2 0 0 0 4 0 V1.5 M4 8.5 v14"/><path d="M14 1.5 c-3 1 -3 8 0 9 v12"/></g></svg>',
+  leaf:'<svg width="22" height="22" viewBox="0 0 24 24"><g class="stroke"><path d="M4 20 C 4 8, 12 4, 20 4 C 20 16, 12 20, 4 20 Z"/><path d="M4 20 C 9 14, 14 10, 20 4"/></g></svg>',
+  burger:'<svg width="24" height="20" viewBox="0 0 26 22"><g class="stroke"><path d="M3 8.5 C 3 3, 23 3, 23 8.5 Z"/><path d="M3.5 11.5 h19 M4 14.5 q9 4 18 0"/><path d="M4.5 17.5 h17"/></g></svg>',
+  grill:'<svg width="22" height="24" viewBox="0 0 24 26"><g class="stroke"><path d="M4 10 h16 a8 6 0 0 1 -16 0 Z"/><path d="M7.5 15.5 l-2.5 6.5 M16.5 15.5 l2.5 6.5"/><path d="M9 10 c-1.5 -2 1 -3 0 -5 M12 10 c-1.5 -2.5 1.5 -3.5 0 -6 M15 10 c-1.5 -2 1 -3 0 -5"/></g></svg>',
+  fish:'<svg width="26" height="18" viewBox="0 0 28 18"><g class="stroke"><path d="M2 9 C 8 2.5, 17 2.5, 21.5 9 C 17 15.5, 8 15.5, 2 9 Z"/><path d="M21.5 9 l4.5 -4 v8 Z"/><circle cx="7" cy="8" r="1"/></g></svg>',
+  bites:'<svg width="22" height="20" viewBox="0 0 24 22"><g class="stroke"><path d="M4 6 l3.5 13 h9 l3.5 -13 Z"/><path d="M8 6 v13 M12 6 v13 M16 6 v13"/></g></svg>',
+  cake:'<svg width="22" height="22" viewBox="0 0 24 24"><g class="stroke"><path d="M4 13 h16 v8 H4 Z"/><path d="M4 13 c2.5 -3.5 13.5 -3.5 16 0"/><path d="M12 13 V6 M12 6 q-1.8 -1.8 0 -3.6 q1.8 1.8 0 3.6"/></g></svg>',
+};
+
+/* ---------------- MENU DATA (merged) ---------------- */
+const M = [
+{
+  id:"breakfast", icon:"sun",
+  nav:{en:"Breakfast", tr:"Kahvaltı"},
+  eyebrow:{en:"Good morning by the sea", tr:"Deniz kıyısında günaydın"},
+  title:{en:"Breakfast & Brunch", tr:"Kahvaltı & Branç"},
+  groups:[
+    { head:{en:"Signature Breakfasts", tr:"İmza Kahvaltılar"}, feature:true, items:[
+      {n:{en:"Signature Breakfast Plate", tr:"İmza Kahvaltı Tabağı"},
+       d:{en:"Ezine & cheddar cheese, grilled halloumi & sausage, beef & chicken ham, salami, tomato, cucumber, black & green olives, honey, clotted cream, butter, strawberry & apricot jam, boiled or fried egg, bread basket",
+          tr:"Ezine & çedar peyniri, ızgara hellim & sosis, dana & tavuk jambon, salam, domates, salatalık, siyah & yeşil zeytin, bal, kaymak, tereyağı, çilek & kayısı reçeli, haşlanmış veya kızarmış yumurta, ekmek sepeti"}, p:"900"},
+      {n:{en:"Traditional Mixed Breakfast", tr:"Geleneksel Serpme Kahvaltı"},
+       d:{en:"for 2 · Ezine, Erzincan tulum, aged cheddar & twisted cheese, olives, tomato, cucumber, fresh greens, grilled halloumi & sausage, fried sausage, eggs your way, honey, clotted cream, butter, jams, peanut butter, bitter-orange & green-walnut preserves, bread basket",
+          tr:"2 kişilik · Ezine, Erzincan tulum, eski kaşar & örgü peyniri, zeytin, domates, salatalık, taze yeşillikler, ızgara hellim & sosis, kızarmış sosis, dilediğiniz şekilde yumurta, bal, kaymak, tereyağı, reçeller, fıstık ezmesi, acı portakal & yeşil ceviz reçeli, ekmek sepeti"}, p:"1750"},
+      {n:{en:"English Breakfast", tr:"İngiliz Kahvaltısı"},
+       d:{en:"baked beans, grilled mushroom & tomato, pork sausage, bacon, hash brown, apricot marmalade, fried bread with egg, BBQ sauce",
+          tr:"fırın fasulye, ızgara mantar & domates, domuz sosisi, bacon, hash brown, kayısı marmelatı, yumurtalı kızarmış ekmek, barbekü sos"}, p:"900"},
+    ]},
+    { head:{en:"Brunch Classics", tr:"Branç Klasikleri"}, items:[
+      {n:{en:"Egg Benedict", tr:"Egg Benedict"},
+       d:{en:"toasted bread, avocado, sun-dried tomato, rocket, smoked salmon or bacon, poached egg, hollandaise, chives",
+          tr:"kızarmış ekmek, avokado, kurutulmuş domates, roka, füme somon veya bacon, poşe yumurta, hollandaise sos, frenk soğanı"}, p:"650"},
+      {n:{en:"Mediterranean Avocado Toast", tr:"Akdeniz Avokadolu Tost"},
+       d:{en:"toasted bread, avocado, sun-dried tomato, rocket, fried egg, chives",
+          tr:"kızarmış ekmek, avokado, kurutulmuş domates, roka, kızarmış yumurta, frenk soğanı"}, p:"650"},
+      {n:{en:"Pancakes", tr:"Pankek"},
+       d:{en:"fresh fruit, maple syrup, chocolate cream", tr:"taze meyve, akçaağaç şurubu, çikolata kreması"}, p:"600"},
+    ]},
+    { head:{en:"Healthy & Wellness", tr:"Sağlıklı & Hafif"}, items:[
+      {n:{en:"Açaí Bowl", tr:"Açai Kasesi"},
+       d:{en:"açaí yogurt, berries, banana, granola & honey", tr:"açai yoğurt, orman meyveleri, muz, granola & bal"}, p:"550"},
+      {n:{en:"Granola with Fruit & Honey", tr:"Meyveli & Ballı Granola"},
+       d:{en:"yogurt, seasonal fruit, honey", tr:"yoğurt, mevsim meyvesi, bal"}, p:"350"},
+      {n:{en:"Protein Yogurt Bowl", tr:"Protein Yoğurt Kasesi"},
+       d:{en:"yogurt, chia seeds, banana, berries & almonds", tr:"yoğurt, chia tohumu, muz, orman meyveleri & badem"}, p:"400"},
+      {n:{en:"Fresh Fruit Plate", tr:"Taze Meyve Tabağı"},
+       d:{en:"seasonal fruit selection", tr:"mevsim meyve seçkisi"}, p:"450"},
+    ]},
+  ]
+},
+{
+  id:"eggs", icon:"egg",
+  nav:{en:"Eggs & Toasts", tr:"Yumurta & Tost"},
+  eyebrow:{en:"Cooked to order", tr:"Sipariş üzerine"},
+  title:{en:"Eggs, Toasts & Sandwiches", tr:"Yumurtalar, Tostlar & Sandviçler"},
+  groups:[
+    { head:{en:"Eggs & Omelettes", tr:"Yumurtalar & Omletler"}, items:[
+      {n:{en:"Classic Omelette", tr:"Klasik Omlet"}, p:"400"},
+      {n:{en:"Cheese Omelette", tr:"Peynirli Omlet"}, p:"450"},
+      {n:{en:"Vegetable Omelette", tr:"Sebzeli Omlet"}, p:"450"},
+      {n:{en:"Mixed Omelette", tr:"Karışık Omlet"}, p:"480"},
+      {n:{en:"Menemen", tr:"Menemen"}, d:{en:"Turkish-style eggs with tomato & pepper", tr:"domates & biberli Türk usulü yumurta"}, p:"420"},
+      {n:{en:"Scrambled Eggs", tr:"Çırpılmış Yumurta"}, p:"350"},
+      {n:{en:"Eggs with Beef Sausage", tr:"Sucuklu Yumurta"}, d:{en:"sucuklu yumurta", tr:"dana sucuğu ile"}, p:"450"},
+    ]},
+    { head:{en:"Toasts & Sandwiches", tr:"Tostlar & Sandviçler"}, items:[
+      {n:{en:"Halloumi Croissant Sandwich", tr:"Hellimli Kruvasan Sandviç"},
+       d:{en:"croissant, grilled halloumi, avocado, lettuce, mint, cucumber, tomato, bikla sauce",
+          tr:"kruvasan, ızgara hellim, avokado, marul, nane, salatalık, domates, bikla sos"}, p:"650"},
+      {n:{en:"Old-Fashioned Grilled Cheese", tr:"Eski Usul Kaşarlı Tost"},
+       d:{en:"village bread, tulum & mild cheese, green pepper, tomato",
+          tr:"köy ekmeği, tulum & yumuşak peynir, yeşil biber, domates"}, p:"450"},
+      {n:{en:"Cheddar Toast", tr:"Kaşarlı Tost"}, p:"400"},
+      {n:{en:"Mix Toast", tr:"Karışık Tost"}, d:{en:"cheddar & sausage", tr:"kaşar & sosis"}, p:"450"},
+    ]},
+  ]
+},
+{
+  id:"starters", icon:"fork",
+  nav:{en:"Starters", tr:"Başlangıçlar"},
+  eyebrow:{en:"To begin", tr:"Başlangıç"},
+  title:{en:"Starters & Snacks", tr:"Başlangıçlar & Atıştırmalıklar"},
+  groups:[
+    { head:{en:"Cold Starters", tr:"Soğuk Başlangıçlar"}, items:[
+      {n:{en:"Grilled Pepper Salad", tr:"Izgara Biber Salatası"},
+       d:{en:"red pepper, caramelized walnut, grilled halloumi, avocado, parsley, olive oil, lemon, caper buds",
+          tr:"kırmızı biber, karamelize ceviz, ızgara hellim, avokado, maydanoz, zeytinyağı, limon, kapari"}, p:"350"},
+      {n:{en:"Sea Bass Ceviche", tr:"Levrek Ceviche"},
+       d:{en:"peppers, fresh coriander, avocado, sun-dried tomato, caper buds, micro herbs",
+          tr:"biberler, taze kişniş, avokado, kurutulmuş domates, kapari, mikro yeşillikler"}, p:"550"},
+      {n:{en:"Smoked Salmon", tr:"Füme Somon"},
+       d:{en:"avocado, rocket, beet carpaccio, lemon, caper buds, sour cream",
+          tr:"avokado, roka, pancar carpaccio, limon, kapari, ekşi krema"}, p:"750"},
+      {n:{en:"Burrata & Prosciutto", tr:"Burrata & Prosciutto"},
+       d:{en:"creamy burrata, smoked beef prosciutto, cherry tomato, rocket, basil oil, grilled sourdough",
+          tr:"kremamsı burrata, füme dana prosciutto, çeri domates, roka, fesleğen yağı, ızgara ekşi maya ekmek"}, p:"850"},
+      {n:{en:"Amaris Cheese Platter", tr:"Amaris Peynir Tabağı"},
+       d:{en:"graviera, parmesan, smoked & brie cheese, smoked beef & chicken, olives, dried fruit, marmalade, grissini",
+          tr:"graviera, parmesan, füme & brie peyniri, füme dana & tavuk, zeytinler, kuru meyve, marmelat, grissini"}, p:"1200"},
+    ]},
+    { head:{en:"Hot Starters", tr:"Sıcak Başlangıçlar"}, items:[
+      {n:{en:"Stuffed Mushrooms", tr:"Doldurulmuş Mantar"},
+       d:{en:"filled with Tulum cheese, walnuts & herbs, sun-dried tomato cream",
+          tr:"tulum peyniri, ceviz & otlarla doldurulmuş, kurutulmuş domates kreması"}, p:"450"},
+      {n:{en:"Salt & Pepper Squid", tr:"Tuz & Biberli Kalamar"},
+       d:{en:"crispy squid, spring onion & chili, tartar sauce, green leaves, cherry tomato",
+          tr:"çıtır kalamar, taze soğan & acı biber, tartar sos, yeşillikler, çeri domates"}, p:"750"},
+      {n:{en:"Shrimp Tempura", tr:"Karides Tempura"},
+       d:{en:"with sweet chili sauce & fresh vegetables", tr:"tatlı acı sos & taze sebzeler ile"}, p:"800"},
+      {n:{en:"Hot Honey Brie", tr:"Acılı Ballı Brie"},
+       d:{en:"fried brie, parmesan crisp bread, seasonal & dried fruit, hot honey",
+          tr:"kızarmış brie, parmesanlı gevrek ekmek, mevsim & kuru meyve, acılı bal"}, p:"800"},
+      {n:{en:"Scallop with Butter", tr:"Tereyağlı Deniz Tarağı"},
+       d:{en:"pan-fried scallop, asparagus, Mediterranean greens",
+          tr:"tavada deniz tarağı, kuşkonmaz, Akdeniz yeşillikleri"}, p:"1050"},
+    ]},
+    { head:{en:"Beach Snacks", tr:"Sahil Atıştırmalıkları"}, items:[
+      {n:{en:"Potato Wedges", tr:"Patates Dilimleri"}, d:{en:"Cyprus potato wedges with tomato sauce", tr:"domates soslu Kıbrıs patates dilimleri"}, p:"350"},
+      {n:{en:"Mozzarella Sticks", tr:"Mozzarella Çubukları"}, d:{en:"crispy mozzarella with salsa dip", tr:"salsa soslu çıtır mozzarella"}, p:"400"},
+      {n:{en:"Onion Rings", tr:"Soğan Halkaları"}, d:{en:"golden fried onion rings", tr:"altın sarısı kızarmış soğan halkaları"}, p:"400"},
+      {n:{en:"Crispy Chicken Strips", tr:"Çıtır Tavuk Şeritleri"}, d:{en:"served with fries & sweet chili sauce", tr:"patates kızartması & tatlı acı sos ile servis edilir"}, p:"550"},
+      {n:{en:"Truffle Parmesan Fries", tr:"Trüflü Parmesanlı Patates"}, d:{en:"crispy fries, parmesan, truffle oil & fresh herbs", tr:"çıtır patates, parmesan, trüf yağı & taze otlar"}, p:"550"},
+    ]},
+  ]
+},
+{
+  id:"mains", icon:"leaf",
+  nav:{en:"Salads · Pasta · Pizza", tr:"Salata · Makarna · Pizza"},
+  eyebrow:{en:"Fresh & wood-fired", tr:"Taze & odun ateşinde"},
+  title:{en:"Salads, Pasta & Pizza", tr:"Salatalar, Makarnalar & Pizzalar"},
+  groups:[
+    { head:{en:"Fresh Salads", tr:"Taze Salatalar"}, items:[
+      {n:{en:"Cyprus Village Salad", tr:"Kıbrıs Köy Salatası"},
+       d:{en:"white cabbage, cherry tomato, lettuce, cucumber, coriander, celery, grilled halloumi, olive oil & lemon",
+          tr:"beyaz lahana, çeri domates, marul, salatalık, kişniş, kereviz, ızgara hellim, zeytinyağı & limon"}, p:"550"},
+      {n:{en:"Avocado Mediterranean Salad", tr:"Avokadolu Akdeniz Salatası"},
+       d:{en:"avocado, mixed greens, cherry tomato, cucumber, citrus dressing",
+          tr:"avokado, karışık yeşillikler, çeri domates, salatalık, narenciye sosu"}, p:"650"},
+      {n:{en:"Goat Cheese & Rocket Salad", tr:"Keçi Peynirli & Roka Salatası"},
+       d:{en:"rocket, goat cheese, red onion, caramelized walnuts, crispy vegetables",
+          tr:"roka, keçi peyniri, kırmızı soğan, karamelize ceviz, çıtır sebzeler"}, p:"700"},
+      {n:{en:"Caesar Salad", tr:"Sezar Salata"},
+       d:{en:"with grilled chicken (750), shrimp or beef (850), lettuce, parmesan, croutons, caesar sauce",
+          tr:"ızgara tavuk (750), karides veya dana (850), marul, parmesan, kruton, sezar sos ile"}, p:"750 / 850"},
+      {n:{en:"Smoked Salmon Salad", tr:"Füme Somon Salatası"},
+       d:{en:"smoked salmon, avocado, Mediterranean greens, cherry tomato, caper, red onion, citrus dressing",
+          tr:"füme somon, avokado, Akdeniz yeşillikleri, çeri domates, kapari, kırmızı soğan, narenciye sosu"}, p:"850"},
+      {n:{en:"Beef Tenderloin Quinoa Salad", tr:"Dana Bonfile Kinoa Salatası"},
+       d:{en:"grilled beef, quinoa, Mediterranean greens, tomato marmalade",
+          tr:"ızgara dana, kinoa, Akdeniz yeşillikleri, domates marmelatı"}, p:"900"},
+    ]},
+    { head:{en:"Pasta", tr:"Makarnalar"}, items:[
+      {n:{en:"Spaghetti Napoletana", tr:"Spaghetti Napoletana"}, d:{en:"classic tomato sauce, parmesan & basil", tr:"klasik domates sosu, parmesan & fesleğen"}, p:"700"},
+      {n:{en:"Penne Arrabbiata", tr:"Penne Arrabbiata"}, d:{en:"spicy tomato sauce, olives, basil & parmesan", tr:"acılı domates sosu, zeytin, fesleğen & parmesan"}, p:"750"},
+      {n:{en:"Spaghetti Bolognese", tr:"Spaghetti Bolognese"}, d:{en:"slow-cooked minced beef, tomato sauce, parmesan & basil", tr:"ağır pişmiş dana kıyma, domates sosu, parmesan & fesleğen"}, p:"800"},
+      {n:{en:"Fettuccine Alfredo Chicken", tr:"Fettuccine Alfredo Tavuk"}, d:{en:"chicken, mushroom, truffle oil, cream, parmesan, basil, sun-dried tomato", tr:"tavuk, mantar, trüf yağı, krema, parmesan, fesleğen, kurutulmuş domates"}, p:"800"},
+      {n:{en:"Linguine Pesto Shrimp", tr:"Linguine Pesto Karides"}, d:{en:"shrimp in pesto cream sauce", tr:"pesto kremalı sosta karides"}, p:"900"},
+    ]},
+    { head:{en:"Pizza", tr:"Pizzalar"}, items:[
+      {n:{en:"Margherita", tr:"Margherita"}, d:{en:"mozzarella, pizza sauce, cherry tomato, fresh basil, parmesan", tr:"mozzarella, pizza sosu, çeri domates, taze fesleğen, parmesan"}, p:"750"},
+      {n:{en:"Quattro Formaggi", tr:"Quattro Formaggi"}, d:{en:"mozzarella, Tulum, parmesan & ricotta, sun-dried tomato, basil", tr:"mozzarella, tulum, parmesan & ricotta, kurutulmuş domates, fesleğen"}, p:"850"},
+      {n:{en:"BBQ Chicken", tr:"Barbekü Tavuk"}, d:{en:"mozzarella, BBQ chicken, red onion, coriander, parmesan", tr:"mozzarella, barbekü tavuk, kırmızı soğan, kişniş, parmesan"}, p:"850"},
+      {n:{en:"Marco Polo", tr:"Marco Polo"}, d:{en:"mozzarella, chicken, sun-dried tomato, parmesan", tr:"mozzarella, tavuk, kurutulmuş domates, parmesan"}, p:"850"},
+      {n:{en:"Mediterranean", tr:"Akdeniz"}, d:{en:"mozzarella, feta, mushroom, olives, sun-dried tomato, basil, parmesan", tr:"mozzarella, beyaz peynir, mantar, zeytin, kurutulmuş domates, fesleğen, parmesan"}, p:"850"},
+      {n:{en:"Pepperoni", tr:"Pepperoni"}, d:{en:"mozzarella, beef pepperoni, parmesan, rocket, cherry tomato", tr:"mozzarella, dana pepperoni, parmesan, roka, çeri domates"}, p:"850"},
+    ]},
+  ]
+},
+{
+  id:"burgers", icon:"burger",
+  nav:{en:"Burgers · Wraps", tr:"Burger · Dürüm"},
+  eyebrow:{en:"Handhelds & sharing", tr:"El lezzetleri & paylaşımlık"},
+  title:{en:"Burgers, Wraps & Sandwiches", tr:"Burgerler, Dürümler & Sandviçler"},
+  groups:[
+    { head:{en:"Gourmet Burgers", tr:"Gurme Burgerler"}, items:[
+      {n:{en:"Crispy Chicken Burger", tr:"Çıtır Tavuk Burger"},
+       d:{en:"crispy chicken, BBQ sauce, caramelized onion, mushroom, lettuce, tomato, pickles, chips",
+          tr:"çıtır tavuk, barbekü sos, karamelize soğan, mantar, marul, domates, turşu, patates"}, p:"700"},
+      {n:{en:"Classic / Cheeseburger", tr:"Klasik / Çedarlı Burger"},
+       d:{en:"homemade beef patty, cheddar, lettuce, tomato, pickles, chips",
+          tr:"ev yapımı dana köfte, çedar, marul, domates, turşu, patates"}, p:"720 / 750"},
+      {n:{en:"Vegetarian Burger", tr:"Vejetaryen Burger"},
+       d:{en:"sautéed mushroom, caramelized onion, cheddar, lettuce, tomato, pickles, chips",
+          tr:"sote mantar, karamelize soğan, çedar, marul, domates, turşu, patates"}, p:"650"},
+      {n:{en:"Mini Sliders", tr:"Mini Slider"},
+       d:{en:"mini beef patties, cheddar, tomato, lettuce, pickles, chips",
+          tr:"mini dana köfteler, çedar, domates, marul, turşu, patates"}, p:"850"},
+      {n:{en:"BBQ Smokehouse Burger", tr:"Barbekü Smokehouse Burger"},
+       d:{en:"beef patty, smoked beef, cheddar, BBQ mushroom, red onion, lettuce, tomato, chips",
+          tr:"dana köfte, füme dana, çedar, barbekü mantar, kırmızı soğan, marul, domates, patates"}, p:"850"},
+      {n:{en:"Amaris Burger", tr:"Amaris Burger"},
+       d:{en:"double patty, fried egg, cheddar, caramelized onion, mushroom, lettuce, tomato, pickles, chips",
+          tr:"çift köfte, kızarmış yumurta, çedar, karamelize soğan, mantar, marul, domates, turşu, patates"}, p:"1050"},
+    ]},
+    { head:{en:"Wraps & Sandwiches", tr:"Dürümler & Sandviçler"}, items:[
+      {n:{en:"Chicken Wrap", tr:"Tavuk Dürüm"},
+       d:{en:"sautéed chicken & mushroom, peppers, onion, cheddar, tortilla, chips",
+          tr:"sote tavuk & mantar, biberler, soğan, çedar, tortilla, patates"}, p:"750"},
+      {n:{en:"Beef Wrap", tr:"Dana Dürüm"},
+       d:{en:"sautéed beef & mushroom, peppers, onion, cheddar, tortilla, chips",
+          tr:"sote dana & mantar, biberler, soğan, çedar, tortilla, patates"}, p:"850"},
+      {n:{en:"Amaris Sandwich", tr:"Amaris Sandviç"},
+       d:{en:"grilled halloumi & chicken, tomato, lettuce, pickles, bikla sauce, ciabatta, wedges",
+          tr:"ızgara hellim & tavuk, domates, marul, turşu, bikla sos, ciabatta, patates dilimleri"}, p:"750"},
+      {n:{en:"Steak Sandwich", tr:"Biftek Sandviç"},
+       d:{en:"grilled beef, sautéed peppers & mushroom, caramelized onion, cheddar, ciabatta, wedges",
+          tr:"ızgara dana, sote biber & mantar, karamelize soğan, çedar, ciabatta, patates dilimleri"}, p:"950"},
+      {n:{en:"Club Sandwich", tr:"Club Sandviç"},
+       d:{en:"triple jumbo toast, beef & chicken ham, egg, cheddar, lettuce, tomato, coleslaw, chips",
+          tr:"üçlü jumbo tost, dana & tavuk jambon, yumurta, çedar, marul, domates, coleslaw, patates"}, p:"850"},
+    ]},
+  ]
+},
+{
+  id:"grill", icon:"grill",
+  nav:{en:"Grill", tr:"Izgara"},
+  eyebrow:{en:"From the grill", tr:"Izgaradan"},
+  title:{en:"Grill", tr:"Izgara"},
+  groups:[
+    { head:{en:"The Grill Menu", tr:"Izgara Menüsü"}, items:[
+      {n:{en:"Grilled Chicken Skewers", tr:"Izgara Tavuk Şiş"},
+       d:{en:"herb-marinated chicken, grilled vegetables, sumac onion salad, chips, lavash",
+          tr:"otlarla marine tavuk, ızgara sebzeler, sumaklı soğan salatası, patates, lavaş"}, p:"850"},
+      {n:{en:"Creamy Mushroom Chicken", tr:"Kremalı Mantarlı Tavuk"},
+       d:{en:"sautéed chicken, mushroom, onion, peppers, garlic cream",
+          tr:"sote tavuk, mantar, soğan, biberler, sarımsaklı krema"}, p:"950"},
+      {n:{en:"Grilled Chicken Wings", tr:"Izgara Tavuk Kanat"},
+       d:{en:"grilled vegetables, sumac onion salad, chips, lavash",
+          tr:"ızgara sebzeler, sumaklı soğan salatası, patates, lavaş"}, p:"950"},
+      {n:{en:"Lamb Skewer", tr:"Kuzu Şiş"},
+       d:{en:"herb-marinated lamb, grilled vegetables, sumac onion salad, chips, lavash",
+          tr:"otlarla marine kuzu, ızgara sebzeler, sumaklı soğan salatası, patates, lavaş"}, p:"1100"},
+      {n:{en:"Beef Tenderloin", tr:"Dana Bonfile"},
+       d:{en:"herb-marinated, grilled vegetables, mashed potato, demi-glace",
+          tr:"otlarla marine, ızgara sebzeler, patates püresi, demi-glace"}, p:"1350"},
+      {n:{en:"Lamb Chops", tr:"Kuzu Pirzola"},
+       d:{en:"herb-marinated, steamed vegetables, mashed potato",
+          tr:"otlarla marine, buğulanmış sebzeler, patates püresi"}, p:"1300"},
+      {n:{en:"Rib Eye Steak", tr:"Rib Eye Steak"},
+       d:{en:"herb-marinated, steamed vegetables, mashed potato, demi-glace",
+          tr:"otlarla marine, buğulanmış sebzeler, patates püresi, demi-glace"}, p:"1350"},
+    ]},
+    { head:{en:"Grill Sharing Platters", tr:"Izgara Paylaşım Tabakları"}, feature:true, items:[
+      {n:{en:"Beer Plate", tr:"Bira Tabağı"},
+       d:{en:"crispy chicken, sausage, onion rings, chips, sweet chili & BBQ sauce",
+          tr:"çıtır tavuk, sosis, soğan halkaları, patates, tatlı acı & barbekü sos"}, p:"800"},
+      {n:{en:"Combo Platter", tr:"Kombo Tabak"},
+       d:{en:"for 2 · mozzarella sticks, sausage, onion rings, wedges, crispy wings, sweet chili & BBQ sauce",
+          tr:"2 kişilik · mozzarella çubukları, sosis, soğan halkaları, patates dilimleri, çıtır kanat, tatlı acı & barbekü sos"}, p:"1300"},
+    ]},
+  ]
+},
+{
+  id:"seafood", icon:"fish",
+  nav:{en:"Seafood", tr:"Deniz Ürünleri"},
+  eyebrow:{en:"From the sea", tr:"Denizden"},
+  title:{en:"Seafood", tr:"Deniz Ürünleri"},
+  groups:[
+    { head:{en:"Seafood Menu", tr:"Deniz Ürünleri Menüsü"}, items:[
+      {n:{en:"Garlic Butter Shrimp", tr:"Sarımsaklı Tereyağlı Karides"},
+       d:{en:"jumbo shrimp, butter, garlic, chili, cherry tomato",
+          tr:"jumbo karides, tereyağı, sarımsak, acı biber, çeri domates"}, p:"850"},
+      {n:{en:"Fish & Chips", tr:"Fish & Chips"},
+       d:{en:"crispy fish fillet, Cyprus potatoes, tartar sauce, lemon, greens",
+          tr:"çıtır balık fileto, Kıbrıs patatesi, tartar sos, limon, yeşillikler"}, p:"950"},
+      {n:{en:"Grilled or Fried Calamari", tr:"Izgara veya Kızarmış Kalamar"},
+       d:{en:"corn-floured calamari, Cyprus potatoes, tartar sauce, lemon, greens",
+          tr:"mısır unlu kalamar, Kıbrıs patatesi, tartar sos, limon, yeşillikler"}, p:"990"},
+      {n:{en:"Fish of the Day", tr:"Günün Balığı"},
+       d:{en:"fried, grilled, steamed, sautéed or baked",
+          tr:"kızartma, ızgara, buğulama, sote veya fırın"}, p:"850"},
+      {n:{en:"Sea Bass", tr:"Levrek"},
+       d:{en:"asparagus, broccoli, lemon butter sauce, mashed potato, pea sprouts",
+          tr:"kuşkonmaz, brokoli, limonlu tereyağı sosu, patates püresi, bezelye filizi"}, p:"1000"},
+      {n:{en:"Sea Bream", tr:"Çipura"},
+       d:{en:"grilled with seasonal vegetables", tr:"mevsim sebzeleriyle ızgara"}, p:"950"},
+      {n:{en:"Rock Bass", tr:"Lahoz"},
+       d:{en:"boiled vegetables, rocket, lemon, cherry tomato",
+          tr:"haşlanmış sebzeler, roka, limon, çeri domates"}, p:"1050"},
+      {n:{en:"Shrimp Casserole", tr:"Karides Güveç"},
+       d:{en:"jumbo shrimp, butter, garlic, green pepper, tomato, mushroom, cheese, parsley",
+          tr:"jumbo karides, tereyağı, sarımsak, yeşil biber, domates, mantar, peynir, maydanoz"}, p:"1200"},
+      {n:{en:"Grilled Salmon", tr:"Izgara Somon"},
+       d:{en:"artichoke & fennel purée, boiled vegetables, rocket, lemon, cherry tomato",
+          tr:"enginar & rezene püresi, haşlanmış sebzeler, roka, limon, çeri domates"}, p:"1300"},
+      {n:{en:"Grilled Octopus", tr:"Izgara Ahtapot"},
+       d:{en:"herb-marinated, steamed vegetables, jacket potato, special sauce",
+          tr:"otlarla marine edilmiş, buğulanmış sebzeler, fırın patates, özel sos"}, p:"2100"},
+    ]},
+    { head:{en:"Sea Sharing Platters", tr:"Deniz Paylaşım Tabakları"}, feature:true, items:[
+      {n:{en:"Amaris Seafood Combo", tr:"Amaris Deniz Ürünleri Kombosu"},
+       d:{en:"for 2 · calamari, jumbo shrimp, mussels, crab claws, octopus, chips, tartar, lemon",
+          tr:"2 kişilik · kalamar, jumbo karides, midye, yengeç kıskacı, ahtapot, patates, tartar, limon"}, p:"2500"},
+      {n:{en:"Ocean Table", tr:"Okyanus Sofrası"},
+       d:{en:"for 4 · jumbo shrimp, baby & grilled calamari, mussels, whole fish, crab claws, octopus, chips, sauces",
+          tr:"4 kişilik · jumbo karides, baby & ızgara kalamar, midye, bütün balık, yengeç kıskacı, ahtapot, patates, soslar"}, p:"3300"},
+      {n:{en:"Pearls of the Mediterranean", tr:"Akdeniz İncileri"},
+       d:{en:"for 4 · grilled fish, shrimp, mussels, octopus, calamari, crab claws, chips, tartar & sriracha mayo",
+          tr:"4 kişilik · ızgara balık, karides, midye, ahtapot, kalamar, yengeç kıskacı, patates, tartar & sriracha mayonez"}, p:"3500"},
+    ]},
+  ]
+},
+{
+  id:"sides", icon:"bites",
+  nav:{en:"Sides", tr:"Garnitürler"},
+  eyebrow:{en:"A little extra", tr:"Biraz daha"},
+  title:{en:"Sides & Light Bites", tr:"Garnitürler & Hafif Lezzetler"},
+  groups:[
+    { head:{en:"Sides", tr:"Garnitürler"}, items:[
+      {n:{en:"Grilled Halloumi", tr:"Izgara Hellim"}, p:"300"},
+      {n:{en:"Grilled Sausage", tr:"Izgara Sosis"}, p:"300"},
+      {n:{en:"French Fries", tr:"Patates Kızartması"}, p:"300"},
+      {n:{en:"Halloumi Börek", tr:"Hellim Böreği"}, d:{en:"per piece", tr:"adet başına"}, p:"90"},
+      {n:{en:"Feta Roll · Sigara Böreği", tr:"Sigara Böreği"}, d:{en:"4 pieces", tr:"4 adet"}, p:"300"},
+    ]},
+    { head:{en:"Light Bites", tr:"Hafif Lezzetler"}, items:[
+      {n:{en:"Potato Wedges", tr:"Patates Dilimleri"}, d:{en:"Cyprus potato wedges with tomato sauce", tr:"domates soslu Kıbrıs patates dilimleri"}, p:"350"},
+      {n:{en:"Mozzarella Sticks", tr:"Mozzarella Çubukları"}, d:{en:"crispy mozzarella with salsa dip", tr:"salsa soslu çıtır mozzarella"}, p:"400"},
+      {n:{en:"Onion Rings", tr:"Soğan Halkaları"}, d:{en:"golden fried onion rings", tr:"altın sarısı kızarmış soğan halkaları"}, p:"400"},
+      {n:{en:"Crispy Chicken Strips", tr:"Çıtır Tavuk Şeritleri"}, d:{en:"served with fries & sweet chili sauce", tr:"patates kızartması & tatlı acı sos ile servis edilir"}, p:"550"},
+      {n:{en:"Truffle Parmesan Fries", tr:"Trüflü Parmesanlı Patates"}, d:{en:"parmesan, truffle oil & fresh herbs", tr:"parmesan, trüf yağı & taze otlar"}, p:"550"},
+    ]},
+  ]
+},
+{
+  id:"desserts", icon:"cake",
+  nav:{en:"Desserts", tr:"Tatlılar"},
+  eyebrow:{en:"Sweet endings", tr:"Tatlı final"},
+  title:{en:"Desserts", tr:"Tatlılar"},
+  groups:[
+    { head:{en:"Desserts", tr:"Tatlılar"}, items:[
+      {n:{en:"Fruit Plate", tr:"Meyve Tabağı"}, d:{en:"seasonal fresh fruit selection", tr:"mevsim taze meyve seçkisi"}, p:"450"},
+      {n:{en:"Lemon Cheesecake", tr:"Limonlu Cheesecake"}, p:"450"},
+      {n:{en:"Raspberry Cheesecake", tr:"Ahududulu Cheesecake"}, p:"450"},
+      {n:{en:"Triple Chocolate Brownie", tr:"Üçlü Çikolatalı Brownie"}, p:"450"},
+      {n:{en:"Marlenka Medovik", tr:"Marlenka Medovik"}, d:{en:"layered honey & walnut cake", tr:"katmanlı ballı & cevizli pasta"}, p:"560"},
+      {n:{en:"Carrot Cream Cake", tr:"Havuçlu Kremalı Pasta"}, p:"450"},
+    ]},
+    { head:{en:"More Sweets", tr:"Diğer Tatlılar"}, items:[
+      {n:{en:"Devil's Fudge Cake", tr:"Devil's Fudge Cake"}, p:"450"},
+      {n:{en:"Latte Mona", tr:"Latte Mona"}, p:"500"},
+      {n:{en:"Mosaic Cake", tr:"Mozaik Pasta"}, p:"350"},
+      {n:{en:"Turkish Pumpkin Dessert", tr:"Kabak Tatlısı"}, p:"500"},
+      {n:{en:"Semolina Dessert", tr:"İrmik Tatlısı"}, d:{en:"with orange & ice cream", tr:"portakal & dondurma ile"}, p:"400"},
+      {n:{en:"Ice Cream", tr:"Dondurma"}, d:{en:"per scoop · ask for today's flavours", tr:"top başına · günün lezzetlerini sorun"}, p:"160"},
+    ]},
+  ]
+},
+];
+
+/* ---------------- render ---------------- */
+let LANG = "en";
+function el(tag, cls, html){ const e=document.createElement(tag); if(cls)e.className=cls; if(html!=null)e.innerHTML=html; return e; }
+
+function buildNav(){
+  const nav=document.getElementById("nav"); nav.innerHTML="";
+  M.forEach(s=>{ const a=el("a",null,s.nav[LANG]); a.href="#"+s.id; a.dataset.target=s.id; nav.appendChild(a); });
+}
+
+function buildMenu(animate){
+  const main=document.getElementById("menu"); main.innerHTML="";
+  M.forEach((s, si)=>{
+    const sec=el("section","section"); sec.id=s.id;
+    const head=el("div","section-head");
+    head.appendChild(el("span","sec-eyebrow", s.eyebrow[LANG]));
+    head.appendChild(el("h2","sec-title", s.title[LANG]));
+    const orn=el("div","sec-orn");
+    orn.innerHTML='<span class="ln"></span>'+(ICON[s.icon]||'')+'<span class="ln"></span>';
+    head.appendChild(orn);
+    sec.appendChild(head);
+
+    const wrap=el("div","groups");
+    s.groups.forEach(g=>{
+      const gr=el("div","group"+(g.feature?" feature":""));
+      gr.appendChild(el("div","group-head", g.head[LANG]));
+      g.items.forEach(it=>{
+        const item=el("div","item"+(animate?"":" visible"));
+        const top=el("div","item-top");
+        top.appendChild(el("span","item-name", it.n[LANG]));
+        top.appendChild(el("span","leader"));
+        top.appendChild(el("span","item-price", it.p));
+        item.appendChild(top);
+        if(it.d) item.appendChild(el("div","item-desc", it.d[LANG]));
+        gr.appendChild(item);
+      });
+      wrap.appendChild(gr);
+    });
+    sec.appendChild(wrap);
+
+    if(si < M.length-1){
+      const div=document.createElementNS("http://www.w3.org/2000/svg","svg");
+      div.setAttribute("class","divider"); div.setAttribute("viewBox","0 0 1200 30"); div.setAttribute("preserveAspectRatio","none");
+      div.innerHTML='<path class="stroke" d="M0 15 Q 60 4 120 15 T 240 15 T 360 15 T 480 15 T 600 15 T 720 15 T 840 15 T 960 15 T 1080 15 T 1200 15"/>';
+      sec.appendChild(div);
+    }
+    main.appendChild(sec);
+  });
+  if(animate) observeItems();
+}
+
+let io;
+function observeItems(){
+  if(io) io.disconnect();
+  io=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        [...e.target.querySelectorAll(".item:not(.visible)")].forEach((it,i)=>setTimeout(()=>it.classList.add("visible"), i*55));
+        io.unobserve(e.target);
+      }
+    });
+  }, {threshold:.12, rootMargin:"0px 0px -8% 0px"});
+  document.querySelectorAll(".group").forEach(g=>io.observe(g));
+}
+
+function setupNavSpy(){
+  const links=[...document.querySelectorAll(".navbar a")];
+  const spy=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) links.forEach(l=>l.classList.toggle("active", l.dataset.target===e.target.id)); });
+  }, {rootMargin:"-45% 0px -50% 0px"});
+  document.querySelectorAll(".section").forEach(s=>spy.observe(s));
+}
+
+function applyUI(){
+  document.querySelectorAll("[data-i]").forEach(node=>{ const k=node.getAttribute("data-i"); if(UI[k]) node.textContent=UI[k][LANG]; });
+  document.documentElement.lang=LANG; document.documentElement.dataset.lang=LANG;
+}
+
+function setLang(lang){
+  if(lang===LANG) return;
+  LANG=lang;
+  document.getElementById("btn-en").classList.toggle("active", lang==="en");
+  document.getElementById("btn-tr").classList.toggle("active", lang==="tr");
+  applyUI(); buildNav(); setupNavSpy();
+  const main=document.getElementById("menu");
+  main.classList.add("swapping");
+  setTimeout(()=>{ buildMenu(false); main.classList.remove("swapping"); }, 240);
+}
+
+applyUI(); buildNav(); buildMenu(true); setupNavSpy();
+</script>
+</body>
+</html>
